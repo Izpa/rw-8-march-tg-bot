@@ -19,6 +19,7 @@
           (log/info (pformat msg))
           (when (< 0 chat-id)
             (tbot/forward-message bot courier-chat-id chat-id message-id)
+            (tbot/send-message bot courier-chat-id "Ваш заказ принят и скоро будет выполнен!")
             (tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))
       (log/error "unexpected message type" (pformat upd)))))
 
