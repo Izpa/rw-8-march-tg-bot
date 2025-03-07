@@ -18,7 +18,11 @@
       (do (log/info "Received message")
           (log/info (pformat msg))
           (when (< 0 chat-id)
-            (log/info "Forward message: " (tbot/forward-message bot courier-chat-id chat-id message-id))
+            (->> message-id
+                 (tbot/forward-message  courier-chat-id chat-id)
+                 :result
+                 :message_id
+                 (tbot/pin-chat-message bot courier-chat-id))
             (tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))
       (log/error "unexpected message type" (pformat upd)))))
 
