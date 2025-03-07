@@ -7,7 +7,7 @@
    [utils :refer [pformat]]))
 
 (defmethod ig/init-key ::msg-handler [_ {:keys [bot courier-chat-id]}]
-  (fn [{{{chat-id :id}:chat
+  (fn [{{{chat-id :id} :chat
          message-id :message-id
          :as message} :message
         :keys [callback_query]
@@ -18,9 +18,7 @@
       (do (log/info "Received message")
           (log/info (pformat msg))
           (when (< 0 chat-id)
-            (tbot/forward-message bot courier-chat-id chat-id message-id)
-            (tbot/forward-message bot chat-id chat-id message-id)
-            (tbot/send-message bot courier-chat-id "Ваш заказ принят и скоро будет выполнен!")
+            (log/info "Forward message: " (tbot/forward-message bot courier-chat-id chat-id message-id))
             (tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))
       (log/error "unexpected message type" (pformat upd)))))
 
