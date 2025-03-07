@@ -7,15 +7,14 @@
    [utils :refer [->num]]))
 
 (defmethod ig/init-key ::handler [_ msg-handler]
-  #(try
+  #(do
      (-> %
          :body
          slurp
          (json/parse-string true)
          msg-handler)
-     (catch Exception e (log/error (.getMessage e)))
-     (finally {:status  200
-               :headers {"Content-Type" "text/html"}})))
+     {:status  200
+      :headers {"Content-Type" "text/html"}}))
 
 (defmethod ig/init-key ::server [_ {:keys [handler port]}]
   (log/info "Start http-server on port " port)
