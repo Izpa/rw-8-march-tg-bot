@@ -19,7 +19,7 @@
           (log/info (pformat msg))
           (when (< 0 chat-id)
             (->> message-id
-                 (tbot/forward-message  courier-chat-id chat-id)
+                 (tbot/forward-message bot courier-chat-id chat-id)
                  :result
                  :message_id
                  (tbot/pin-chat-message bot courier-chat-id))
