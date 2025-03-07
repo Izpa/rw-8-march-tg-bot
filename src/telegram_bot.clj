@@ -8,7 +8,7 @@
 
 (defmethod ig/init-key ::msg-handler [_ {:keys [bot courier-chat-id]}]
   (fn [{{{chat-id :id} :chat
-         message-id :message-id
+         message-id :message_id
          :as message} :message
         :keys [callback_query]
         :as upd}]
