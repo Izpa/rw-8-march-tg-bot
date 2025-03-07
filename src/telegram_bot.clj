@@ -26,7 +26,8 @@
                        :result
                        :message_id
                        (tbot/pin-chat-message bot courier-chat-id))
-                  (tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))))
+                  (tbot/send-message bot chat-id "Приём заказов окончен. До встречи в следующем году и ещё раз с праздником!)")
+                  #_(tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))))
       (log/error "unexpected message type" (pformat upd)))))
 
 (defmethod ig/halt-key! ::run-client [_ {:keys [thread bot]}]
