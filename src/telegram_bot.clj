@@ -9,6 +9,7 @@
 (defmethod ig/init-key ::msg-handler [_ {:keys [bot courier-chat-id]}]
   (fn [{{{chat-id :id} :chat
          message-id :message_id
+         message-text :text
          :as message} :message
         :keys [callback_query]
         :as upd}]
@@ -18,12 +19,14 @@
       (do (log/info "Received message")
           (log/info (pformat msg))
           (when (< 0 chat-id)
-            (->> message-id
-                 (tbot/forward-message bot courier-chat-id chat-id)
-                 :result
-                 :message_id
-                 (tbot/pin-chat-message bot courier-chat-id))
-            (tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))
+            (if (= message-text "/start")
+              (tbot/send-message bot chat-id "Добро пожаловать! Отправьте любой заказ в сообщении и он будет исполнен!)")
+              (do (->> message-id
+                       (tbot/forward-message bot courier-chat-id chat-id)
+                       :result
+                       :message_id
+                       (tbot/pin-chat-message bot courier-chat-id))
+                  (tbot/send-message bot chat-id "Ваш заказ принят и скоро будет выполнен!")))))
       (log/error "unexpected message type" (pformat upd)))))
 
 (defmethod ig/halt-key! ::run-client [_ {:keys [thread bot]}]
