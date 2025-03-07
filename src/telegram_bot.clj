@@ -6,13 +6,19 @@
    [telegrambot-lib.core :as tbot]
    [utils :refer [pformat]]))
 
-(defmethod ig/init-key ::msg-handler [_ _]
-  (fn [{:keys [message callback_query] :as upd}]
+(defmethod ig/init-key ::msg-handler [_ {:keys [bot courier-chat-id]}]
+  (fn [{{{chat-id :id}:chat
+         message-id :message-id
+         :as message} :message
+        :keys [callback_query]
+        :as upd}]
     (if-let [msg (or message (-> callback_query
                                  :message
                                  (assoc :data (:data callback_query))))]
       (do (log/info "Received message")
-          (log/info (pformat msg)))
+          (log/info (pformat msg))
+          (when (< 0 chat-id)
+            (tbot/forwar-message bot courier-chat-id chat-id message-id)))
       (log/error "unexpected message type" (pformat upd)))))
 
 (defmethod ig/halt-key! ::run-client [_ {:keys [thread bot]}]
