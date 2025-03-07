@@ -16,7 +16,7 @@
   ([] (load-config (or (keyword (System/getProperty "Profile"))
                        :default)))
   ([profile]
-   (-> "common_config.edn"
+   (-> "config.edn"
        io/resource
        (aero/read-config {:profile profile}))))
 

@@ -24,7 +24,7 @@
 (defonce system (atom nil))
 
 (defn start-system!
-  []
+  [_]
   (reset! system (start!)))
 
 (defn stop-watch!
@@ -39,7 +39,7 @@
 (comment
   (System/getenv "CLIENT_BOT_TELEGRAM_TOKEN")
 
-  (start-system!)
+  (start-system! nil)
 
   (stop-system!) ;;stop watch
 
