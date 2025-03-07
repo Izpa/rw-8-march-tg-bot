@@ -1,0 +1,21 @@
+{:telegram-bot/client
+ {:token #env "CLIENT_BOT_TELEGRAM_TOKEN"}
+
+ :telegram-bot/msg-handler
+ {}
+ 
+ :telegram-bot/run-client
+ {:bot #ig/ref :telegram-bot/client
+  :url #env "SELF_URL"
+  :msg-handler #ig/ref :telegram-bot/msg-handler
+  :long-polling-config {:timeout #or [#env "CLIENT_BOT_LONG_POLLING_TIMEOUT" 10]
+                        :sleep #or [#env "CLIENT_BOT_LONG_POLLING_SLEEP" 1000]}}
+
+ :db/execute!
+ {:ds #ig/ref #profile {:default :db/ds
+                        :test :test-utils/db-ds}}
+
+ :http/handler #ig/ref :telegram-bot/msg-handler
+
+ :http/server {:port #or [#env "HTTP_PORT" 8080]
+               :handler #ig/ref :http/handler}}
